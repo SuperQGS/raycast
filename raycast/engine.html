@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style>
+        * {
+            text-align: center;
+        }
+        body {
+            background-color: black;
+        }
+        canvas {
+            border: 1px solid black;
+            width: 75%;
+            
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: pixelated;
+            
+        }
+    </style>
+    <body>
+        <!--PASTE CANVAS TAG UNDER HERE [note: you can change size and position with css or putting the tag where you want]-->
+        <canvas id='Raycast'></canvas>
+        
+        <br>
+        <!--PASTE IMAGE TAGS UNDER HERE [note: you can hide this with css]-->
+        <div id="images"><img src="images/RC_Floor.bmp" id="Floor"><img src="images/RC_Wall(Top).bmp" id="WallTop"><img src="images/RC_Wall.bmp" id="Wall"><img src="images/RC_Wall(Camera).bmp" id="Camera"><img src="images/UP.bmp" id="OrbU"><img src="images/DOWN.bmp" id="OrbD"><img src="images/RIGHT.bmp" id="OrbR"><img src="images/LEFT.bmp" id="OrbL">
+        <img src="images/RobotD.png" id="RobotD">
+        <img src="images/RobotU.png" id="RobotU">
+        <img src="images/RobotR.png" id="RobotR">
+        <img src="images/RobotL.png" id="RobotL">
+        </div>
+        
+        <script>
+            //PASTE CANVAS VARIABLES UNDER HERE
+            var canvas_name = "Raycast"; var texture_dimensions = 16; var grid_height = 256; var grid_width = 256;
+            //PASTE TILES UNDER HERE
+            var tiles = [{x:-64, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-48, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-32, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-16, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:0, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:16, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:32, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:48, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-48, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-32, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:0, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-16, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:16, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:32, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:48, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:32, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:16, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:0, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-16, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-32, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:64, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:48, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:32, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:16, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:0, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-32, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-16, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-128, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-112, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-96, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-64, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-80, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-128, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:-112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:-80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:64, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:80, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:96, type:'Wall', image:WallTop, image_string:'WallTop'},{x:80, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:96, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:112, y:112, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-64, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:-48, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:-32, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:-16, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:0, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:32, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:48, y:-112, type:'Wall', image:Wall, image_string:'Wall'},{x:64, y:-48, type:'Wall', image:Wall, image_string:'Wall'},{x:80, y:-48, type:'Wall', image:Wall, image_string:'Wall'},{x:96, y:-48, type:'Wall', image:Wall, image_string:'Wall'},{x:-112, y:-48, type:'Wall', image:Wall, image_string:'Wall'},{x:-80, y:-48, type:'Wall', image:Wall, image_string:'Wall'},{x:-96, y:-48, type:'Wall', image:Camera, image_string:'Camera'},{x:16, y:-112, type:'Wall', image:Camera, image_string:'Camera'},{x:-32, y:-16, type:'Wall', image:WallTop, image_string:'WallTop'},{x:16, y:-16, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-32, y:0, type:'Wall', image:WallTop, image_string:'WallTop'},{x:16, y:0, type:'Wall', image:WallTop, image_string:'WallTop'},{x:-32, y:16, type:'Wall', image:Wall, image_string:'Wall'},{x:16, y:16, type:'Wall', image:Wall, image_string:'Wall'},{x:48, y:96, type:'OrbU', image:OrbU, image_string:'OrbU'},{x:-64, y:-96, type:'OrbD', image:OrbD, image_string:'OrbD'},{x:-112, y:-32, type:'OrbR', image:OrbR, image_string:'OrbR'},{x:96, y:32, type:'OrbL', image:OrbL, image_string:'OrbL'},{x:64, y:-32, type:'OrbD', image:OrbD, image_string:'OrbD'},{x:-80, y:32, type:'OrbU', image:OrbU, image_string:'OrbU'},{x:-96, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:-80, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:-80, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-96, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-112, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-112, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:-96, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:-80, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:-80, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-96, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-96, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:-112, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:-112, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:-64, y:96, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:96, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:96, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:96, type:'OrbU', image:OrbU, image_string:'OrbU'},{x:0, y:-96, type:'OrbD', image:OrbD, image_string:'OrbD'},{x:-48, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:96, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:96, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:96, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:80, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:64, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:-48, y:-96, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:-96, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:-32, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:-96, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:-16, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:0, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:48, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:64, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:80, y:32, type:'Floor', image:Floor, image_string:'Floor'},{x:96, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:80, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:64, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:16, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:64, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:80, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:96, y:0, type:'Floor', image:Floor, image_string:'Floor'},{x:96, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:80, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:64, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:-16, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:-48, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:-64, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:-80, type:'Floor', image:Floor, image_string:'Floor'},{x:16, y:-96, type:'Floor', image:Floor, image_string:'Floor'},{x:32, y:-96, type:'Floor', image:Floor, image_string:'Floor'},{x:48, y:-96, type:'Floor', image:Floor, image_string:'Floor'},{x:80, y:-32, type:'Floor', image:Floor, image_string:'Floor'},{x:96, y:-32, type:'Floor', image:Floor, image_string:'Floor'},
+                        
+            {x:0, y:0, type:'Robot1', image:RobotD, image_string:'RobotD'}
+            ];
+            
+            //canvas info
+            var canvas = document.getElementById(canvas_name);
+            var ctx = canvas.getContext("2d");
+            ctx.translate(canvas.width / 2,canvas.height / 2);
+            
+            //canvas dimensions
+            document.getElementById(canvas_name).width = grid_width;
+            document.getElementById(canvas_name).height = grid_height;
+            
+            //render stuff
+            var change_tile = 0;
+            var new_tile_num = 0;
+            window.setInterval(function(){ render(); }, 0);
+            function render() {
+                new_tile_num = 0;
+                var num_of_tiles = tiles.length - 1;
+                var loop = true;
+                while (loop) {
+                    if (new_tile_num <= num_of_tiles) {
+                        change_tile = tiles[new_tile_num];
+                        change_tile.x = change_tile.x;
+                        change_tile.y = change_tile.y;
+                        ctx.imageSmoothingEnabled = false;
+                        develop();
+                        new_tile_num = new_tile_num + 1;
+                    } else {
+                        loop = false;
+                    }
+                }
+            }
+            
+            //developer function
+            //NOTE: attributes of each tile are
+            //x:
+            //y:
+            //type:
+            function develop() {
+                if (change_tile.type == "Robot1") {
+                    tiles[new_tile_num].x = player1_x;
+                    tiles[new_tile_num].y = player1_y;
+                    if (direction == "south") {
+                        tiles[new_tile_num].image = RobotD;
+                    }
+                    if (direction == "north") {
+                        tiles[new_tile_num].image = RobotU;
+                    }
+                    if (direction == "west") {
+                        tiles[new_tile_num].image = RobotL;
+                    }
+                    if (direction == "east") {
+                        tiles[new_tile_num].image = RobotR;
+                    }
+                }
+                
+                
+                
+                //this is the line that finally renders the tile
+                ctx.drawImage(change_tile.image, change_tile.x + grid_width/2, change_tile.y + grid_height/2);
+            }
+            
+            
+            function collision() {
+                var new_tile_num = 0;
+                var num_of_tiles = tiles.length;
+                var loop = true;
+                while (loop) {
+                    if (new_tile_num < num_of_tiles) {
+                        change_tile = tiles[new_tile_num];
+                        if (change_tile.type == "Wall") {
+                            
+                            var coord_spoof_x = 0;
+                            var coord_spoof_y = 0;
+                            if (direction == "south") {
+                                coord_spoof_y = 1;
+                            }
+                            if (direction == "north") {
+                                coord_spoof_y = 0 - 1;
+                            }
+                            if (direction == "west") {
+                                coord_spoof_x = 0 - 1;
+                            }
+                            if (direction == "east") {
+                                coord_spoof_x = 1;
+                            }
+                            
+                            if (change_tile.x < player1_x + 16 + coord_spoof_x && change_tile.x + 16 > player1_x + coord_spoof_x && change_tile.y < player1_y + 16 + coord_spoof_y && change_tile.y + 16 > player1_y + coord_spoof_y) {
+                                return true;
+                            }
+                        }
+                        new_tile_num = new_tile_num + 1;
+                    } else {
+                        loop = false;
+                    }
+                }
+            }
+            
+            var robot = tiles[tiles.length - 1];
+            function collide() {
+                
+                var botcoord = robot.x + "," + robot.y;
+                if (botcoord === "32,32") {
+                    
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            //INDEPENDENTS\/
+            
+            //player 1 controls
+            var player1_x = 32;
+            var player1_y = 32;
+            var direction;
+            window.addEventListener("keydown", binds, false);
+            function binds(e) {
+            
+                //test for which key pressed and set coordinates
+                if (e.keyCode == "40") {
+                    //go down
+                    direction = "south";
+                }
+                
+                if (e.keyCode == "39") {
+                    //go right
+                    direction = "east";
+                }
+                
+                if (e.keyCode == "38") {
+                    //go up
+                    direction = "north";
+                }
+            
+                if (e.keyCode == "37") {
+                    //go left
+                    direction = "west";
+                }
+            }
+            
+            window.setInterval(function(){ set_coordinates(); }, 15);
+            function set_coordinates() {
+                //collision();
+                if (direction == "north" && !collision()) {
+                    player1_y = player1_y - 1;
+                }
+                if (direction == "south" && !collision()) {
+                    player1_y = player1_y + 1;
+                }
+                if (direction == "east" && !collision()) {
+                    player1_x = player1_x + 1;
+                }
+                if (direction == "west" && !collision()) {
+                    player1_x = player1_x - 1;
+                }
+                
+            }
+        </script>
+    </body>
+</html>

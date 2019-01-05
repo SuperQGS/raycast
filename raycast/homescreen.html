@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style>
+        * {
+            text-align: center;
+            color: white;
+        }
+        body {
+            background-color: black;
+        }
+        
+        .white {
+            color: white;
+        }
+        
+        .black {
+            color: black;
+        }
+        
+        #homescreen {
+            width: 50%;
+        }
+        img { 
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -o-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: pixelated;
+        image-rendering: optimize-contrast;
+        -ms-interpolation-mode: nearest-neighbor;
+        }
+    </style>
+    <body onkeypress="press_key()">
+        <div id="screen">
+            <img id="homescreen" src="homescreen.png">
+        </div>
+        
+        <script>
+            function press_key() {
+                //link
+            }
+            
+            the_cake_is_a_lie();
+            function the_cake_is_a_lie() {
+                var date = new Date();
+                var month = date.getMonth();
+                var day = date.getDate();
+                var whatdate = day + "," + month;
+                if (whatdate == "10,9") { //10,9
+                    document.getElementById("homescreen").src = "portal.png";
+                    
+                }
+            }
+        </script>
+    </body>
+</html>
